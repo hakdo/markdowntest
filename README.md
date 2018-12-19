@@ -37,7 +37,7 @@ The methodology described is based on agile project structures and borrows part 
 from a methodology developed for safety critical systems by SINTEF called 
 SAFEScrum. It also uses insights from Nicolaysen et. al.<sup>[1](#ref:nicolaysen)</sup>.
 
-![Image](secdevflow.png?raw=true)
+![Image](/secdevflow.png?raw=true)
 
 # References and footnotes
 <a name="ref:nicolaysen">1</a>: Nicolaysen, T., Sassoon, R., Line, M. B., & Jaatun, M. G. (2012). Agile Software Development: The Straight and Narrow Path. Security-Aware Systems Applications and Software Development Methods, 1
