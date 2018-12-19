@@ -44,11 +44,11 @@ Software vulnerabilities can stem from design flaws, and implementation errors. 
 
 Key activities in our development lifecycle:
 
-* Crate a backlog
+* Create a backlog
 * Perform threat modeling based on data flow diagrams and derive security requirements
 * Update backlog with security requirements, and treat the security requirements the same way as other features - include them in unit and integration testing!
 * Integrate static analysis and software component analysis in the development workflow by building these tests into the CI/CD toolchain
-* Merge requests and QA: important part of the process but this is not discussed in detail in this guidelien
+* Merge requests and QA: important part of the process but this is not discussed in detail in this guideline
 * Key performance indicators: derive KPI's from automated testing tools (both static and dynamic) and use for prioritizing maintenance tasks throughout the development lifecycle
 
 ### Threat modeling basics
@@ -56,7 +56,7 @@ The purpose of a threat model is to figure out what threats the software compone
 
 > "An ACTION done on ASSET by ACTOR to achieve OUTCOME because of MOTIVATION."
 
-The process of threat modeling is thus identifying that, and then using that insight to intorduce risk mitigation. Risk mitigation can be achieved by: 
+The process of threat modeling is thus identifying that, and then using that insight to introduce risk mitigation. Risk mitigation can be achieved by: 
 
 * Avoiding the threat (e.g. taking away the vulnerable functionality)
 * Making it harder to perform the required actions
@@ -117,7 +117,7 @@ During QA, the following activities are generally recommended:
 * The quality assurance engineer should use appropriate software code review techniques depending on criticality and complexity to make sure good practice has been followed. Possible approaches are:
   - Checklist review together with the responsible developer (recommended for most projects)
   - Structured software HAZOP for large and complex projects
-  - Penetration tests when the risk warrents it (including manual engagements)
+  - Penetration tests when the risk warrants it (including manual engagements)
 
 The QA responsible engineer should be responsible for approving the merge request and 
 the deployment to production environments. It is important that this role is separate 
@@ -145,7 +145,7 @@ When doing arithmetic (regarding buffer sizes or how many bytes to read) you nee
 ### Recommended practice to avoid buffer overflows
 The recommendation is to use a safe language like Rust or Go for system programming. Only use C/C++/asm if you have to. In any case make sure all input is validated to avoid both overflow and underflow vulnerabilities. Take special attention when performing operations on strings (char*) or other types of byte arrays.
 
-**Safe string oeprations in c-like languages**: Avoid the following functions for string operations:
+**Safe string operations in c-like languages**: Avoid the following functions for string operations:
 ```C
 strcat, strcpy, strncat, strncpy, sprintf, vsprintf, gets
 ```
@@ -181,11 +181,11 @@ There are two types of race conditions that can occur:
 ### TOCTOU: Time of Check vs. Time of Use
 It is a common event in programs that a condition is checked prior to something being executed, for example to check if a user has access to some resource before fetching it and displaying it. Even if those two can happen within fractions of a second, there is a small gap between the check and the use of the resource, that an attacker can potentially use to change what is being executed.
 
-Temporary file case : consider an application that writes temp files to a public location. You can set the file permissions of the temp file to avoid tampering by other users. If the filed already exists before writing to it you may overwrite existing data needed by another process, or you may be using a file prepared by a hacker. Most programs check to see if a file already before opening it and writing to it in order to avoid this situation. If the file exists, the program can delete it, or simply choose another name – and if it doesn’t exist it simply opens the file object for writing.
+Temporary file case: consider an application that writes temp files to a public location. You can set the file permissions of the temp file to avoid tampering by other users. If the file already exists before writing to it you may overwrite existing data needed by another process, or you may be using a file prepared by a hacker. Most programs check to see if a file already before opening it and writing to it in order to avoid this situation. If the file exists, the program can delete it, or simply choose another name – and if it doesn’t exist it simply opens the file object for writing.
 
 An attacker that writes a script to generate a file with the correct filename over and over again can in the end manage to create the file between the check (does it exist?) and the write operation. This could give the attacker the possible to read the contents by setting file permissions differently from the intention of the program. It is also possible for the attacker to use a symlink to make the program write its data to another file on the system. This type of vulnerability has been used for both making system inaccessible by forcing overwriting of password files, and for stealing encryption keys.
 
-Multiple instances case : Another, and more common race condition for web environments is multiple instances of a class trying to write to the same data object simultaneously. A simple example would be to have two sensors counting the number of people passing through two doors. Whenever a door moves, a request is sent the web server to perform the following:
+Multiple instances case: Another, and more common race condition for web environments is multiple instances of a class trying to write to the same data object simultaneously. A simple example would be to have two sensors counting the number of people passing through two doors. Whenever a door moves, a request is sent the web server to perform the following:
 
 * Get the current total count of door passes
 * Increment by 1
@@ -231,7 +231,7 @@ Writing information to publicly writeable directories for later re-use is inhere
 If you do need to use a directory where other processes also have access, you need to make sure that a file does not exist before creating it, and also verify that the file you read from is the same that you created.
 
 #### Avoiding race conditions by resource locking
-To avoid the situation described above for the door counters, you need to lock access to a common resource to avoid multiple threads trying to access the same object simultaneously, thereby creating a race conditions, where appropriate.
+To avoid the situation described above for the door counters, you need to lock access to a common resource to avoid multiple threads trying to access the same object simultaneously, thereby creating a race condition, where appropriate.
 
 #### Language specific tips
 MySQL (and other databases): It is possible to use transactions to avoid a time gap between time of check and time of use. This removes the possibility of a race condition but comes at the expense of extra database overhead. It should be used whenever database records are updated frequently, e.g. for token values.
@@ -373,8 +373,8 @@ When possible, disable the use of DTD’s for the XML processor.
 
 Where this is not possible, XML processor specific defenses must be used. See [OWASP XXE Prevention cheatsheet](https://www.owasp.org/index.php/XML_External_Entity_(XXE)_Prevention_Cheat_Sheet) for a thorough overview of how to configure XML processors for most languages.
 
-Cross-site forgery requests (CSRF)
-A cross-site forgery request (CSRF) vulnerability is one of the most common types of web application vulnerabilities, and it has been on the OWASP top 10 list since 2010. It is no longer as common as it was, but it has been accepted to keep on the OWASP top 10 list for 2017. The list was issued as a release candidate but rejected this summer but the CSRF remains.
+Cross-site request forgery (CSRF)
+A cross-site request forgery (CSRF) vulnerability is one of the most common types of web application vulnerabilities, and it has been on the OWASP top 10 list since 2010. It is no longer as common as it was, but it has been accepted to keep on the OWASP top 10 list for 2017. The list was issued as a release candidate but rejected this summer but the CSRF remains.
 
 A CSRF vulnerability exists when a web application accepts requests from the outside. An attacker then only needs to trick an already logged in user to supply a request string that performs some action on the backend. Depending on the privileges the impact can vary from changing a user's parameters or leaking some information, to stealing credentials, conducting transactions or deleting other user's accounts.
 
@@ -407,7 +407,7 @@ Both of these are “protected” and can only be set by the browser; they are n
 
 Applying a same origin policy and controlling it at the server side is an effective protection measure, and one of the headers will be present in most cases. It protects against CSRF attacks where there is no server state that can be used to set a trustworthy token, such as prior to authentication, e.g. for a login form.
 
-It is possible to set the referer header for a web view embedded in a smartphone app. In theory this could be used to craft a cross-site forgery attack but this would require the user who is logged in to a protected service to be logged in using the same smartphone app that is used to force the referer header; in practice the attacker would need to distribute his/her own web browser to the victim to perform the CSRF attack. The same could be done on any platform but the effort required to perform such an attack makes the credibility of the scenario very low. In addition, input points should be protected with CSRF tokens that would make this attack vector fail. Note also that calling data in web views using a method that defines a base URL will automatically set the referer header to that base URL.
+It is possible to set the referer header for a web view embedded in a smartphone app. In theory this could be used to craft a cross-site forgery attack but this would require the user who is logged in to a protected service to be logged in using the same smartphone app that is used to force the referer header; in practice the attacker would need to distribute his/her own web browser to the victim to perform the CSRF attack. The same could be done on any platform but the effort required to perform such an attack makes the probability of the scenario very low. In addition, input points should be protected with CSRF tokens that would make this attack vector fail. Note also that calling data in web views using a method that defines a base URL will automatically set the referer header to that base URL.
 
 In order to protect against login form CSRF exploits, the web application can create an unauthenticated session (anonymous) to store a token. The session should be destroyed and a new one created when the user authenticates.
 
