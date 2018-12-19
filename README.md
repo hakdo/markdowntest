@@ -87,7 +87,7 @@ E.g.: Input validation.
 * Outcome: Database queries based on user input shall conform to a whitelist of approved queries.
 * Methodology: Use prepared statements for SQL queries and sanitize all user inputs with an approved sanitation library. 
 
-# Unit testing for security
+## Unit testing for security
 To perform unit testing and include security feature testing in unit tests is not highly recommended.
 
 Test cases should be developed based on the security requirements developed in the component threat modeling. A full treatment of writing unit tests is outside the scope of this document, and you should check out some other resources on this topic if needed (some suggestions are given at the end of this document).
